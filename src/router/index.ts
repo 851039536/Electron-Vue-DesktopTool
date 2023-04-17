@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
 
     path: '/',
     name: 'homes',
+    // Import Home page
     component: () => {
       return import('../components/home.vue');
     }
@@ -25,30 +26,25 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/home',
     name: 'home',
-    component: () => {
-      return import('../components/home.vue');
-    }
+    component: () => import('../components/home.vue')
   },
   {
     path: '/CmdCommand',
     name: 'CmdCommand',
-    component: () => {
-      return import('@vi/page/cmd/CmdCommand.vue');
-    }
+    component: () =>
+      import('@vi/page/cmd/CmdCommand.vue').catch(() => {
+        return import('@vi/page/cmd/Error.vue');
+      })
   },
-  {
-    path: '/Desktop',
-    name: 'Desktop',
-    component: () => {
-      return import('@vi/page/desktop/Desktop.vue');
-    }
-  },
+
   {
     path: '/Programs',
     name: 'Programs',
-    component: () => {
-      return import('@vi/page/programs/Programs.vue');
-    }
+    component: () =>
+      import('@vi/page/programs/Programs.vue').catch((error) => {
+        console.log('error loading page', error);
+        return null;
+      })
   }
 ];
 

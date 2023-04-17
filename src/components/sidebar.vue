@@ -19,21 +19,12 @@ const _Cmd = () => {
 };
 
 async function onRouter(id: number) {
-  switch (id) {
-    case 1:
-      await routers('/CmdCommand');
-      break;
-    case 2:
-      await routers('/home');
-      break;
-    case 3:
-      await routers('/Programs');
-      break;
-    case 4:
-      await routers('/Desktop');
-      break;
-    default:
-      break;
+  const router = ['/CmdCommand', '/home', '/Programs'];
+  // This function is used to store the router
+  const selectedRouter = router[id - 1];
+  if (selectedRouter) {
+    // This function is used to select the router
+    await routers(selectedRouter);
   }
 }
 onMounted(() => {});
@@ -43,20 +34,16 @@ onMounted(() => {});
     <div @click="onRouter(1)">控制台</div>
     <div @click="onRouter(2)">工具</div>
     <div @click="onRouter(3)">程序</div>
-    <div @click="onRouter(4)">桌面</div>
     <div>调试工具</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .side {
-  @apply h-741px w-200px;
+  @apply h-733px w-200px pt-2;
   @apply shadow bg-white cursor-pointer;
   div {
-    font-size: 17.5px;
-    text-align: center;
-    margin-top: 5px;
-    padding: 4px;
+    @apply text-lg text-center py-3px text-gray-700;
     &:hover {
       border-radius: 0.25rem;
       color: #ffffff;
