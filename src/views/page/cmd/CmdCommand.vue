@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { cmdApi } from '@api/index';
 const edge = require('electron-edge-js');
 const path = require('path');
 
@@ -22,22 +23,30 @@ const desktop = edge.func({
   methodName: 'GetDesktop'
 });
 
-const rData = ref([]);
+const rData = ref([] as any[]); //类型“never”上不存在属性“name”
 const QDesktop = () => {
-  //taskmgr 传入的参数 如果没有参数设置 null
   desktop('C:\\Users\\CH190006\\Desktop', function (err: any, result: any) {
     if (err) throw err;
     rData.value = result;
     result.co;
   });
 };
+const OpenEXE = (pathName: string) => {
+  QCmd('C:\\Users\\CH190006\\Desktop\\' + pathName);
+};
 
+const rData2 = ref([] as any[]);
 onMounted(() => {
   QDesktop();
+
+  cmdApi.GetPaging().then((res) => {
+    console.log(res.data.data.items);
+    rData2.value = res.data.data.items;
+  });
 });
 </script>
 <template>
-  <div class="cmd w-full bg-gray-100">
+  <div class="cmd">
     <!-- <div class="text-xl mx-2 my-1 text-gray-600">控制台</div> -->
 
     <div class="ml-2 my-3 text-gray-700">cmd窗口</div>
@@ -45,27 +54,10 @@ onMounted(() => {
       <el-input class="mr-2px" v-model="input" placeholder="CMD 控制台指令" clearable />
       <el-button @click="QCmd(input)">启动</el-button>
     </div>
+
     <div class="content">
-      <div class="content-div" @click="QCmd('notepad')">
-        <div>记事本</div>
-      </div>
-      <div class="content-div" @click="QCmd('calc')">
-        <div>计算器</div>
-      </div>
-      <div class="content-div" @click="QCmd('taskmgr')">
-        <div>任务器</div>
-      </div>
-      <div class="content-div" @click="QCmd('mstsc')">
-        <div>远程桌面</div>
-      </div>
-      <div class="content-div" @click="QCmd('regedit')">
-        <div>注册表</div>
-      </div>
-      <div class="content-div" @click="QCmd('control')">
-        <div>控制面板</div>
-      </div>
-      <div class="content-div" @click="QCmd('ncpa.cpl')">
-        <div>网络</div>
+      <div class="content-div" v-for="(item, index) in rData2" :key="index" @click="QCmd(item.keyValue)">
+        <div>{{ item.name }}</div>
       </div>
     </div>
 
@@ -111,7 +103,7 @@ onMounted(() => {
     <div class="list">
       <template v-for="(item, index) in rData" :key="index">
         <div class="list-im" v-if="item">
-          <div>{{ item.split('.')[0] }}</div>
+          <div @click="OpenEXE(item)">{{ item.split('.')[0] }}</div>
         </div>
       </template>
     </div>
@@ -119,27 +111,30 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.content {
-  @apply flex;
-  .content-div {
-    @apply w-22 h-15 m-2 flex;
-    @apply rounded-lg shadow-sm cursor-pointer;
-    @apply bg-white hover:bg-green-400 hover:text-red-600;
-    div {
-      @apply m-auto text-sm text-blue-gray-600;
+.cmd {
+  @apply w-full bg-gray-100;
+  .content {
+    @apply flex;
+    .content-div {
+      @apply w-22 h-14 m-2 flex;
+      @apply rounded-lg shadow cursor-pointer;
+      @apply bg-white hover:bg-green-400 hover:text-red-600;
+      div {
+        @apply m-auto text-sm text-blue-gray-600;
+      }
     }
   }
-}
-.list {
-  @apply flex flex-wrap m-2 bg-white;
-  // @apply bg-white;
-  .list-im {
-    @apply w-[32%] h-7 mx-3px my-1px flex items-center;
-    @apply cursor-pointer  rounded;
+  .list {
+    @apply flex flex-wrap m-2 bg-white rounded;
+    // @apply bg-white;
+    .list-im {
+      @apply w-[32%] h-7 mx-3px my-1px flex items-center;
+      @apply cursor-pointer  rounded;
 
-    div {
-      @apply p-3px text-sm text-blue-gray-600 rounded-lg;
-      @apply hover:text-red-600;
+      div {
+        @apply p-3px text-sm text-blue-gray-600 rounded-lg;
+        @apply hover:text-red-600;
+      }
     }
   }
 }
