@@ -66,6 +66,7 @@ class cmdApi {
    */
   static async GetPaging(identity: number = 0, pageIndex: number = 1, pagesize: number = 6) {
     const data = await get(`/api/cmd/paging/${identity}/${pageIndex}/${pagesize}`, false);
+    ///api/cmd/paging/0/1/10
     return data;
   }
 

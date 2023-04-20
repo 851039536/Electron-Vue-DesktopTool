@@ -36,12 +36,12 @@ const OpenEXE = (pathName: string) => {
 };
 
 const rData2 = ref([] as any[]);
-onMounted(() => {
+onMounted(async () => {
   QDesktop();
 
-  cmdApi.GetPaging().then((res) => {
-    console.log(res.data.data.items);
+  await cmdApi.GetPaging(0, 1, 20).then((res) => {
     rData2.value = res.data.data.items;
+    console.log('%c [ rData2.value ]-44', 'font-size:13px; background:pink; color:#bf2c9f;', rData2.value);
   });
 });
 </script>
@@ -56,48 +56,29 @@ onMounted(() => {
     </div>
 
     <div class="content">
-      <div class="content-div" v-for="(item, index) in rData2" :key="index" @click="QCmd(item.keyValue)">
-        <div>{{ item.name }}</div>
-      </div>
+      <template v-for="(item, index) in rData2" :key="index">
+        <div class="content-div" v-if="item.cmdType.name === '常用'" @click="QCmd(item.keyValue)">
+          <div>{{ item.name }}</div>
+        </div>
+      </template>
     </div>
 
-    <!-- //生成按键 -->
     <div class="content">
-      <div class="content-div" @click="QCmd('shutdown -s -t 0')">
-        <div>关机</div>
-      </div>
-      <div class="content-div" @click="QCmd('shutdown -r -t 0')">
-        <div>重启</div>
-      </div>
-      <div class="content-div" @click="QCmd('shutdown -l -t 0')">
-        <div>注销</div>
-      </div>
-      <div class="content-div" @click="QCmd('shutdown -a')">
-        <div>取消</div>
-      </div>
+      <template v-for="(item, index) in rData2" :key="index">
+        <div class="content-div" v-if="item.cmdType.name === '电脑'" @click="QCmd(item.keyValue)">
+          <div>{{ item.name }}</div>
+        </div>
+      </template>
     </div>
 
-    <!-- 生成页面导航 -->
     <div class="content">
-      <div class="content-div" @click="QCmd('explorer')">
-        <div>资源管理</div>
-      </div>
-      <div class="content-div" @click="QCmd('explorer C:\\')">
-        <div>C盘</div>
-      </div>
-      <div class="content-div" @click="QCmd('explorer D:\\')">
-        <div>D盘</div>
-      </div>
-      <div class="content-div" @click="QCmd('explorer shell:desktop')">
-        <div>桌面</div>
-      </div>
-      <div class="content-div" @click="QCmd('explorer shell:mydocuments')">
-        <div>我的文档</div>
-      </div>
-      <div class="content-div" @click="QCmd('explorer shell:downloads')">
-        <div>下载</div>
-      </div>
+      <template v-for="(item, index) in rData2" :key="index">
+        <div class="content-div" v-if="item.cmdType.name === '资源'" @click="QCmd(item.keyValue)">
+          <div>{{ item.name }}</div>
+        </div>
+      </template>
     </div>
+
     <el-divider />
     <div class="ml-2 my-3 text-gray-700">桌面应用</div>
     <div class="list">
