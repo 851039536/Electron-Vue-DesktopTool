@@ -1,16 +1,25 @@
 <script lang="ts" setup>
 import { cmdApi } from '@api/index';
+import { ElMessage } from 'element-plus';
 const edge = require('electron-edge-js');
 const path = require('path');
 
 const cmd = edge.func({
-  assemblyFile: path.resolve('resources/MechTE.dll'), //找到对应的dll文件
+  assemblyFile: path.resolve('resources/MechTE.dll'),
   typeName: 'MechTE.Cmd.TCmd', // C#中class (namespace MechTE.Cmd.类)
-  methodName: 'VExe' // 导出dll的方法名  async Task<object> Exe2(dynamic name)
+  methodName: 'VExe' // 导出dll的方法名
 });
 const input = ref('');
 const QCmd = (name: string) => {
-  //taskmgr 传入的参数 如果没有参数设置 null
+  //验证name不能为空
+  if (name === '') {
+    ElMessage({
+      message: '指令不能为空',
+      type: 'error'
+    });
+    return;
+  }
+
   cmd(name, function (err: any, result: any) {
     if (err) throw err;
     console.log(result);
@@ -41,7 +50,6 @@ onMounted(async () => {
 
   await cmdApi.GetPaging(0, 1, 20).then((res) => {
     rData2.value = res.data.data.items;
-    console.log('%c [ rData2.value ]-44', 'font-size:13px; background:pink; color:#bf2c9f;', rData2.value);
   });
 });
 </script>
@@ -52,7 +60,7 @@ onMounted(async () => {
     <div class="ml-2 my-3 text-gray-700">cmd窗口</div>
     <div class="w-80 m-2 flex">
       <el-input class="mr-2px" v-model="input" placeholder="CMD 控制台指令" clearable />
-      <el-button @click="QCmd(input)">启动</el-button>
+      <el-button @click="QCmd(<string>input)">启动</el-button>
     </div>
 
     <div class="content">
@@ -84,7 +92,7 @@ onMounted(async () => {
     <div class="list">
       <template v-for="(item, index) in rData" :key="index">
         <div class="list-im" v-if="item">
-          <div @click="OpenEXE(item)">{{ item.split('.')[0] }}</div>
+          <div class="bg-emerald-50" @click="OpenEXE(item)">{{ item.split('.')[0] }}</div>
         </div>
       </template>
     </div>

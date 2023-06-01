@@ -46,6 +46,15 @@ const routes: RouteRecordRaw[] = [
         return null;
       })
   }
+  , {
+    path: '/GeneralUpDownload',
+    name: 'GeneralUpDownload',
+    component: () =>
+      import('@vi/page/general-up-download/GeneralUpDownload.vue').catch((error) => {
+        console.log('error loading page', error);
+        return null;
+      })
+  }
 ];
 
 // createWebHashHistory createWebHistory

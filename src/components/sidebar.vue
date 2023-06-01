@@ -11,7 +11,6 @@ const cmd = edge.func({
 });
 
 const _Cmd = () => {
-  //taskmgr 传入的参数 如果没有参数设置 null
   cmd('D:\\software\\MES Client\\Sajet MES.exe', function (err: any, result: any) {
     if (err) throw err;
     console.log(result);
@@ -19,7 +18,7 @@ const _Cmd = () => {
 };
 
 async function onRouter(id: number) {
-  const router = ['/CmdCommand', '/home', '/Programs'];
+  const router = ['/CmdCommand', '/home', '/Programs','/GeneralUpDownload'];
   // This function is used to store the router
   const selectedRouter = router[id - 1];
   if (selectedRouter) {
@@ -34,6 +33,7 @@ onMounted(() => {});
     <div @click="onRouter(1)">控制台</div>
     <div @click="onRouter(2)">工具</div>
     <div @click="onRouter(3)">程序</div>
+    <div @click="onRouter(4)">上传下载</div>
     <div>调试工具</div>
   </div>
 </template>
