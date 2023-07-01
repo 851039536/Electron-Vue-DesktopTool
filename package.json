@@ -19,7 +19,7 @@
     "@unocss/preset-attributify": "^0.50.6",
     "@unocss/preset-uno": "^0.50.6",
     "@vitejs/plugin-vue": "^4.0.0",
-    "electron": "^22.3.0",
+    "electron": "^25.2.0",
     "electron-builder": "^23.3.3",
     "eslint": "^8.37.0",
     "eslint-plugin-vue": "^9.10.0",
